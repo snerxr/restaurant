@@ -312,10 +312,93 @@ function animateFiveVines() {
     }, "<");
   });
 }
+/**
+ * Ceviche Logo Animation
+ * Liquid ink drop effect, fish particle swarm, and text reveal
+ */
+function animateCeviche() {
+  monster.addEventListener("load", function() {
+    const svgDoc = monster.contentDocument;
 
+    const backdrop = svgDoc.querySelector("#Backdrop");
+    const fishParticles = svgDoc.querySelectorAll("#fishDetails path");
+    const cevicheText = svgDoc.querySelector("#cevicheText");
+    const frame = svgDoc.querySelector("#frame");
+    const clipRect = svgDoc.querySelector("#clip-rect");
+    const liquidFilter = svgDoc.querySelector("feGaussianBlur");
+
+    gsap.set(backdrop, { attr: { r: 0 }, opacity: 0 });
+    gsap.set(liquidFilter, { attr: { stdDeviation: '30' } });
+    gsap.set(clipRect, { attr: { y: 150, height: 0 } });
+    gsap.set(cevicheText, { opacity: 1 });
+    gsap.set(fishParticles, {
+      x: () => gsap.utils.random(-100, 100),
+      y: () => gsap.utils.random(-100, 100),
+      scale: 0,
+      opacity: 0,
+      transformOrigin: '50% 50%'
+    });
+
+    const timeline = gsap.timeline({ delay: 0.5 });
+
+    timeline.to(backdrop, {
+      attr: { r: 34.39 },
+      opacity: 1,
+      duration: 1,
+      ease: 'power2.inOut'
+    })
+    .to(liquidFilter, {
+      attr: { stdDeviation: '1' },
+      duration: 0.8,
+      ease: 'power3.inOut'
+    }, "<0.2");
+
+    timeline.to(fishParticles, {
+      x: 0,
+      y: 0,
+      scale: 1,
+      opacity: 1,
+      duration: 1.2,
+      ease: 'expo.inOut',
+      stagger: {
+        amount: 0.8,
+        from: "random",
+        ease: "power2.in"
+      }
+    }, "-=0.8");
+
+    timeline.to(clipRect, {
+      attr: { y: 65, height: 90 },
+      duration: 1,
+      ease: 'expo.inOut'
+    }, "-=0.5");
+
+    const frameLength = frame.getTotalLength();
+    gsap.set(frame, {
+      strokeDasharray: frameLength,
+      strokeDashoffset: frameLength,
+      opacity: 1
+    });
+    timeline.to(frame, {
+      strokeDashoffset: 0,
+      duration: 1.5,
+      ease: 'power1.inOut'
+    }, "-=0.7");
+
+    timeline.to(svgDoc.querySelector("#Ceviche"), {
+      scale: 0.82,
+      transformOrigin: '50% 50%',
+      duration: 2,
+      ease: 'power1.inOut',
+      yoyo: true,
+      repeat: -1
+    }, ">");
+  });
+}
 
 // Initialize all animations when page loads
 window.addEventListener("DOMContentLoaded", function() {
   animateHearthStone();
   animateFiveVines();
+  animateCeviche();
 });
