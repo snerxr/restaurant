@@ -58,16 +58,17 @@ function animateHearthStone() {
     const hearthOutlineLength = hearthOutline.getTotalLength();
     const underlineLength = underlineScroll.getTotalLength();
 
-    // Set initial stroke-dasharray for path-based animations
+    // Set initial stroke-dasharray for path-based animations with opacity 0
     gsap.set(outerCircle, {
       strokeDasharray: outerCircleLength,
-      strokeDashoffset: outerCircleLength
+      strokeDashoffset: outerCircleLength,
+      opacity: 0
     });
 
     gsap.set(hearthOutline, {
       strokeDasharray: hearthOutlineLength,
       strokeDashoffset: hearthOutlineLength,
-      opacity: 1
+      opacity: 0
     });
 
     gsap.set(underlineScroll, {
@@ -110,11 +111,15 @@ function animateHearthStone() {
     const masterTimeline = gsap.timeline({ delay: 0.5 });
 
     // PHASE 1: Draw the outer circle (Step 1)
-    // Using fromTo() to demonstrate required GSAP method
+    // Using fromTo() to demonstrate required GSAP method with opacity fade-in
     masterTimeline.fromTo(outerCircle,
-      { strokeDashoffset: outerCircleLength },
+      {
+        strokeDashoffset: outerCircleLength,
+        opacity: 0
+      },
       {
         strokeDashoffset: 0,
+        opacity: 1,
         duration: 1.5,
         ease: "power2.inOut"
       },
@@ -122,9 +127,10 @@ function animateHearthStone() {
     );
 
     // PHASE 2: Draw the inner hearth shape (Step 2)
-    // Using to() to demonstrate required GSAP method
+    // Using to() to demonstrate required GSAP method with opacity fade-in
     masterTimeline.to(hearthOutline, {
       strokeDashoffset: 0,
+      opacity: 1,
       duration: 1,
       ease: "power2.inOut"
     }, "+=0.2");
