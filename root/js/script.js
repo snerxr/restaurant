@@ -244,7 +244,6 @@ function animateFiveVines() {
 
     // Get all elements
     const mainCircle = svgDoc.querySelector("#mainCircle");
-    const brandName = svgDoc.querySelector("#brandName");
     const bottleWhiteFillPaths = svgDoc.querySelectorAll('#fill-paths-container .cls-2');
     const bottleRedPaths = svgDoc.querySelectorAll('#bottle-elements .cls-3');
     const bottleStrokePaths = svgDoc.querySelectorAll('.stroke-path');
@@ -257,7 +256,6 @@ function animateFiveVines() {
       strokeWidth: 2
     });
 
-    gsap.set(brandName, { opacity: 0 });
     gsap.set(bottleRedPaths, { opacity: 0 });
     gsap.set(bottleWhiteFillPaths, { opacity: 0 });
 
@@ -312,13 +310,6 @@ function animateFiveVines() {
       opacity: 1,
       ease: 'sine.inOut'
     }, "<");
-
-    // Step 4: Final Text Reveal
-    timeline.to(brandName, {
-      duration: 1,
-      opacity: 1,
-      ease: 'power2.inOut'
-    }, ">-0.5");
   });
 }
 
