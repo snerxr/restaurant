@@ -244,109 +244,76 @@ function animateFiveVines() {
 
     // Get all elements
     const mainCircle = svgDoc.querySelector("#mainCircle");
-    const fiveShape = svgDoc.querySelector("#fiveShape");
-    const vine1 = svgDoc.querySelector("#vine1");
-    const vine2 = svgDoc.querySelector("#vine2");
-    const vine3 = svgDoc.querySelector("#vine3");
-    const vine4 = svgDoc.querySelector("#vine4");
-    const vine5 = svgDoc.querySelector("#vine5");
-    const bottleNeckCork = svgDoc.querySelector("#bottleNeckCork");
+    const bottleRedPaths = svgDoc.querySelectorAll('#bottle-elements .cls-3');
+    const bottleWhiteFillPaths = svgDoc.querySelectorAll('#fill-paths-container .cls-2');
+    const bottleStrokePaths = svgDoc.querySelectorAll('.stroke-path');
 
     // Set initial states
-    gsap.set([fiveShape, vine1, vine2, vine3, vine4, vine5, bottleNeckCork], {
+    gsap.set(mainCircle, {
+      transformOrigin: '50% 50%',
+      fill: 'transparent',
+      stroke: '#231f20',
+      strokeWidth: 2,
+      scale: 0,
       opacity: 0
     });
 
-    gsap.set(mainCircle, {
-      scale: 0,
-      opacity: 0,
-      transformOrigin: "center center",
-      fill: "transparent"
-    });
+    gsap.set(bottleRedPaths, { opacity: 0 });
+    gsap.set(bottleWhiteFillPaths, { opacity: 0 });
 
-    // Calculate path lengths for vine line drawing
-    const vine1Length = vine1.getTotalLength();
-    const vine2Length = vine2.getTotalLength();
-    const vine3Length = vine3.getTotalLength();
-    const vine4Length = vine4.getTotalLength();
-    const vine5Length = vine5.getTotalLength();
-
-    gsap.set([vine1, vine2, vine3, vine4, vine5], {
-      strokeDasharray: function(i, target) {
-        return target.getTotalLength();
-      },
-      strokeDashoffset: function(i, target) {
-        return target.getTotalLength();
-      },
-      opacity: 1
+    // Prepare stroke paths for animation
+    bottleStrokePaths.forEach(pathNode => {
+      const pathLength = pathNode.getTotalLength();
+      gsap.set(pathNode, {
+        strokeDasharray: pathLength,
+        strokeDashoffset: pathLength,
+        opacity: 1
+      });
     });
 
     // Create timeline
     const timeline = gsap.timeline({ delay: 0.5 });
 
-    // PHASE 1: Circle scales up and fades in
-    timeline.to(mainCircle, {
-      scale: 1,
-      opacity: 1,
+    // PHASE 1: Circle Formation & Fill
+    timeline.from(mainCircle, {
       duration: 1,
-      ease: "power2.out"
+      scale: 0,
+      opacity: 0,
+      ease: 'power2.out'
+    })
+    .to(mainCircle, {
+      duration: 0.5,
+      fill: '#000000',
+      ease: 'sine.inOut'
+    }, "-=0.5");
+
+    // PHASE 2: Animate the drawing of each white bottle part (vines)
+    bottleStrokePaths.forEach(pathNode => {
+      timeline.to(pathNode, {
+        duration: 0.5,
+        strokeDashoffset: 0,
+        ease: 'none'
+      }, "-=0.25");
     });
 
-    // Circle fills with black
-    timeline.to(mainCircle, {
-      fill: "#231f20",
-      duration: 0.4,
-      ease: "power1.inOut"
-    }, "+=0.2");
-
-    // PHASE 2: Draw the five vines sequentially
-    timeline.to(vine1, {
-      strokeDashoffset: 0,
-      duration: 0.6,
-      ease: "power1.inOut"
-    }, "+=0.3");
-
-    timeline.to(vine2, {
-      strokeDashoffset: 0,
-      duration: 0.6,
-      ease: "power1.inOut"
-    }, "-=0.4");
-
-    timeline.to(vine3, {
-      strokeDashoffset: 0,
-      duration: 0.6,
-      ease: "power1.inOut"
-    }, "-=0.4");
-
-    timeline.to(vine4, {
-      strokeDashoffset: 0,
-      duration: 0.6,
-      ease: "power1.inOut"
-    }, "-=0.4");
-
-    timeline.to(vine5, {
-      strokeDashoffset: 0,
-      duration: 0.6,
-      ease: "power1.inOut"
-    }, "-=0.4");
-
-    // PHASE 3: Reveal the "5" shape (wine bottle body)
-    timeline.to(fiveShape, {
-      opacity: 1,
-      duration: 0.8,
-      ease: "power2.out"
-    }, "+=0.2");
-
-    // PHASE 4: Bottle neck and cork slide up
-    timeline.fromTo(bottleNeckCork, {
+    // PHASE 3: Reveal the final bottle (white and red parts) and hide stroke paths
+    timeline.to(bottleStrokePaths, {
+      duration: 0.5,
       opacity: 0,
-      y: 20
-    }, {
+      ease: 'sine.inOut'
+    });
+
+    timeline.to(bottleWhiteFillPaths, {
+      duration: 0.5,
       opacity: 1,
-      y: 0,
-      duration: 0.7,
-      ease: "back.out(1.5)"
-    }, "+=0.3");
+      ease: 'sine.inOut'
+    }, "<");
+
+    timeline.to(bottleRedPaths, {
+      duration: 0.5,
+      opacity: 1,
+      ease: 'sine.inOut'
+    }, "<");
   });
 }
 
