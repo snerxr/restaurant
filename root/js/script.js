@@ -313,83 +313,9 @@ function animateFiveVines() {
   });
 }
 
-/**
- * Ceviche Logo Animation
- * Building the C mark with fish and garnish elements
- */
-function animateCeviche() {
-  monster.addEventListener("load", function() {
-    const svgDoc = monster.contentDocument;
-
-    // Get main elements
-    const backdrop = svgDoc.querySelector("#Backdrop");
-    const fishGroup = svgDoc.querySelector("#Fish");
-    const cevicheText = svgDoc.querySelector("#cevicheText");
-
-    // Set initial states
-    gsap.set([backdrop, fishGroup, cevicheText], {
-      opacity: 0
-    });
-
-    // Get all fish path elements (there are many detailed paths)
-    const allFishPaths = svgDoc.querySelectorAll("#Fish path");
-
-    // Set up path drawing for fish elements
-    gsap.set(allFishPaths, {
-      strokeDasharray: function(i, target) {
-        const length = target.getTotalLength();
-        return length > 0 ? length : 1;
-      },
-      strokeDashoffset: function(i, target) {
-        const length = target.getTotalLength();
-        return length > 0 ? length : 1;
-      }
-    });
-
-    // Create timeline
-    const timeline = gsap.timeline({ delay: 0.5 });
-
-    // PHASE 1: Draw the main circular backdrop
-    timeline.fromTo(backdrop, {
-      scale: 0,
-      opacity: 0,
-      transformOrigin: "center center"
-    }, {
-      scale: 1,
-      opacity: 1,
-      duration: 1.2,
-      ease: "elastic.out(1, 0.5)"
-    });
-
-    // PHASE 2: Draw the fish outline
-    timeline.to(fishGroup, {
-      opacity: 1,
-      duration: 0.1
-    }, "+=0.3");
-
-    timeline.to(allFishPaths, {
-      strokeDashoffset: 0,
-      duration: 1.5,
-      stagger: 0.02,
-      ease: "power1.inOut"
-    }, "<");
-
-    // PHASE 3: Reveal "Ceviche" text
-    timeline.fromTo(cevicheText, {
-      opacity: 0,
-      x: -30
-    }, {
-      opacity: 1,
-      x: 0,
-      duration: 1,
-      ease: "power2.out"
-    }, "+=0.4");
-  });
-}
 
 // Initialize all animations when page loads
 window.addEventListener("DOMContentLoaded", function() {
   animateHearthStone();
   animateFiveVines();
-  animateCeviche();
 });
