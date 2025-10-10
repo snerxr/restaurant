@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-ca">
+  <head>
+    <!-- Specify Character Encoding -->
+    <meta charset="UTF-8" />
+    <!-- Controls Layout on Browsers -->
+    <meta name="viewport" content="width=device-width" minimum-scale="1.0" />
+    <!-- Who are you? -->
+    <meta name="author" content="Pushpinder Singh" />
+    <!-- Attach Stylesheet -->
+    <link rel="stylesheet" href="css/style.css"/>
+
+    <!-- *  GSAP on server  -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"></script> -->
+    
+    <!-- * Local GSAP3  -->
+    <!--script type="text/javascript" src="js/vendor/gsap.min.js"></script-->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MotionPathHelper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MotionPathPlugin.min.js"></script>
+    <!-- * Add your JS Script -->
+    <script type="text/javascript" src="js/script.js" defer></script>
+
+    <!-- Name Your Page -->
+    <title>Logo Animations</title>
+  </head>
+
+  <body>
+    <section> 
+      <!-- Embed our SVG as an object. This allows us to edit the SVG and refer to it externally. But why? Now we don't have to copy and paste SVG code into our HTML -->
+      <!--object id='svgObj' data='img/catsper.svg' type="image/svg+xml"></object-->
+      <object id='monster' data='img/ceviche.svg' type="image/svg+xml"></object> 
+      <object id='catsper' data='img/fivevines.svg' type="image/svg+xml"></object> 
+      <object id='squares' data='img/foe-logo.svg' type="image/svg+xml"></object> 
+      <object id='squares' data='img/hearth-&-stone.svg' type="image/svg+xml"></object> 
+    </section>
+  </body>
+</html>

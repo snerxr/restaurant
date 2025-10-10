@@ -1,0 +1,32 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+#monster, #catsper, #squares {
+  width: 200px;
+  height: 200px;
+  display: block;
+  margin: 0 auto;
+  /* visibility: hidden; */
+}
+
+#interface{
+  width: 600px;
+  margin: 10px auto;
+  display: flex;
+  justify-content: space-around;
+  div{
+    border: 1px solid black;
+    flex: 1;
+    text-align: center;
+  }
+}
+
+
+/* ! Remember to target the SVG drawing elements not the group for properties such as fill */
+/* #background {
+  fill: red;
+} */
+
+
