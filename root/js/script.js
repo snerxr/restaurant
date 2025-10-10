@@ -234,7 +234,199 @@ function animateHearthStone() {
   });
 }
 
-// Initialize Hearth & Stone animation when page loads
+/**
+ * Five Vines Logo Animation
+ * Organic growing effect with circle, vines, and wine bottle reveal
+ */
+function animateFiveVines() {
+  catsper.addEventListener("load", function() {
+    const svgDoc = catsper.contentDocument;
+
+    // Get all elements
+    const mainCircle = svgDoc.querySelector("#mainCircle");
+    const fiveShape = svgDoc.querySelector("#fiveShape");
+    const vine1 = svgDoc.querySelector("#vine1");
+    const vine2 = svgDoc.querySelector("#vine2");
+    const vine3 = svgDoc.querySelector("#vine3");
+    const vine4 = svgDoc.querySelector("#vine4");
+    const vine5 = svgDoc.querySelector("#vine5");
+    const bottleNeckCork = svgDoc.querySelector("#bottleNeckCork");
+
+    // Set initial states
+    gsap.set([fiveShape, vine1, vine2, vine3, vine4, vine5, bottleNeckCork], {
+      opacity: 0
+    });
+
+    gsap.set(mainCircle, {
+      scale: 0,
+      opacity: 0,
+      transformOrigin: "center center",
+      fill: "transparent"
+    });
+
+    // Calculate path lengths for vine line drawing
+    const vine1Length = vine1.getTotalLength();
+    const vine2Length = vine2.getTotalLength();
+    const vine3Length = vine3.getTotalLength();
+    const vine4Length = vine4.getTotalLength();
+    const vine5Length = vine5.getTotalLength();
+
+    gsap.set([vine1, vine2, vine3, vine4, vine5], {
+      strokeDasharray: function(i, target) {
+        return target.getTotalLength();
+      },
+      strokeDashoffset: function(i, target) {
+        return target.getTotalLength();
+      },
+      opacity: 1
+    });
+
+    // Create timeline
+    const timeline = gsap.timeline({ delay: 0.5 });
+
+    // PHASE 1: Circle scales up and fades in
+    timeline.to(mainCircle, {
+      scale: 1,
+      opacity: 1,
+      duration: 1,
+      ease: "power2.out"
+    });
+
+    // Circle fills with black
+    timeline.to(mainCircle, {
+      fill: "#231f20",
+      duration: 0.4,
+      ease: "power1.inOut"
+    }, "+=0.2");
+
+    // PHASE 2: Draw the five vines sequentially
+    timeline.to(vine1, {
+      strokeDashoffset: 0,
+      duration: 0.6,
+      ease: "power1.inOut"
+    }, "+=0.3");
+
+    timeline.to(vine2, {
+      strokeDashoffset: 0,
+      duration: 0.6,
+      ease: "power1.inOut"
+    }, "-=0.4");
+
+    timeline.to(vine3, {
+      strokeDashoffset: 0,
+      duration: 0.6,
+      ease: "power1.inOut"
+    }, "-=0.4");
+
+    timeline.to(vine4, {
+      strokeDashoffset: 0,
+      duration: 0.6,
+      ease: "power1.inOut"
+    }, "-=0.4");
+
+    timeline.to(vine5, {
+      strokeDashoffset: 0,
+      duration: 0.6,
+      ease: "power1.inOut"
+    }, "-=0.4");
+
+    // PHASE 3: Reveal the "5" shape (wine bottle body)
+    timeline.to(fiveShape, {
+      opacity: 1,
+      duration: 0.8,
+      ease: "power2.out"
+    }, "+=0.2");
+
+    // PHASE 4: Bottle neck and cork slide up
+    timeline.fromTo(bottleNeckCork, {
+      opacity: 0,
+      y: 20
+    }, {
+      opacity: 1,
+      y: 0,
+      duration: 0.7,
+      ease: "back.out(1.5)"
+    }, "+=0.3");
+  });
+}
+
+/**
+ * Ceviche Logo Animation
+ * Building the C mark with fish and garnish elements
+ */
+function animateCeviche() {
+  monster.addEventListener("load", function() {
+    const svgDoc = monster.contentDocument;
+
+    // Get main elements
+    const backdrop = svgDoc.querySelector("#Backdrop");
+    const fishGroup = svgDoc.querySelector("#Fish");
+    const cevicheText = svgDoc.querySelector("#cevicheText");
+
+    // Set initial states
+    gsap.set([backdrop, fishGroup, cevicheText], {
+      opacity: 0
+    });
+
+    // Get all fish path elements (there are many detailed paths)
+    const allFishPaths = svgDoc.querySelectorAll("#Fish path");
+
+    // Set up path drawing for fish elements
+    gsap.set(allFishPaths, {
+      strokeDasharray: function(i, target) {
+        const length = target.getTotalLength();
+        return length > 0 ? length : 1;
+      },
+      strokeDashoffset: function(i, target) {
+        const length = target.getTotalLength();
+        return length > 0 ? length : 1;
+      }
+    });
+
+    // Create timeline
+    const timeline = gsap.timeline({ delay: 0.5 });
+
+    // PHASE 1: Draw the main circular backdrop
+    timeline.fromTo(backdrop, {
+      scale: 0,
+      opacity: 0,
+      transformOrigin: "center center"
+    }, {
+      scale: 1,
+      opacity: 1,
+      duration: 1.2,
+      ease: "elastic.out(1, 0.5)"
+    });
+
+    // PHASE 2: Draw the fish outline
+    timeline.to(fishGroup, {
+      opacity: 1,
+      duration: 0.1
+    }, "+=0.3");
+
+    timeline.to(allFishPaths, {
+      strokeDashoffset: 0,
+      duration: 1.5,
+      stagger: 0.02,
+      ease: "power1.inOut"
+    }, "<");
+
+    // PHASE 3: Reveal "Ceviche" text
+    timeline.fromTo(cevicheText, {
+      opacity: 0,
+      x: -30
+    }, {
+      opacity: 1,
+      x: 0,
+      duration: 1,
+      ease: "power2.out"
+    }, "+=0.4");
+  });
+}
+
+// Initialize all animations when page loads
 window.addEventListener("DOMContentLoaded", function() {
   animateHearthStone();
+  animateFiveVines();
+  animateCeviche();
 });
