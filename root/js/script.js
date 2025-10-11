@@ -54,7 +54,7 @@ function animateHearthStone() {
     });
 
     gsap.set(bistroText, {
-      opacity: 1
+      opacity: 0
     });
 
     // Calculate path lengths for line drawing animations
@@ -174,14 +174,11 @@ function animateHearthStone() {
       "+=0.4"
     );
 
-    // Bistro text slide-up and fade-in with stagger
-    masterTimeline.from(bistroTspans, {
-      opacity: 0,
-      y: 20,
-      scale: 0.5,
+    // Remove staggered tspans animation and add fade-in for bistroText group
+    masterTimeline.to(bistroText, {
+      opacity: 1,
       duration: 0.6,
-      stagger: 0.08,
-      ease: "back.out(1.5)"
+      ease: "power1.inOut"
     }, "+=0.4");
 
     // PHASE 5: Animate utensils - fork and spoon (Step 5)
@@ -220,16 +217,10 @@ function animateHearthStone() {
       ease: "power1.inOut"
     }, "+=0.2");
 
-    // Final flourish - subtle scale pulse on entire logo
-    masterTimeline.to(svgDoc.querySelector("#Bistro"), {
-      scale: 1.02,
-      duration: 0.3,
-      yoyo: true,
-      repeat: 1,
-      ease: "power1.inOut",
-      transformOrigin: "center center"
-    }, "+=0.5");
-
+    bistroTspans.forEach(tspan => {
+      tspan.style.opacity = "";
+      tspan.style.transform = "";
+    });
   });
 }
 
