@@ -395,9 +395,247 @@ function animateCeviche() {
   });
 }
 
+/**
+ * Family of Eateries Logo Animation
+ * Three-phase signature flourish animation: red script, title reveal, and polish
+ */
+function animateFamilyOfEateries() {
+  // Wait for SVG to load before accessing internal elements
+  squares.addEventListener("load", function() {
+    // Access the SVG document inside the object tag
+    const svgDoc = squares.contentDocument;
+
+    // Get the main group containing all logo elements
+    const mainGroup = svgDoc.querySelector("#familyofeateries");
+
+    // Get all red flourish paths (cls-6 class)
+    const redFlourish = svgDoc.querySelectorAll(".cls-6");
+
+    // Get all text paths (black text elements)
+    const textPaths = svgDoc.querySelectorAll("#familyofeateries > g:last-child path");
+
+    // Set initial opacity on main group to make it visible
+    gsap.set(mainGroup, { opacity: 1 });
+
+    // Phase 1: Prepare red flourish paths for write-on animation
+    // Calculate total length and set up stroke-dasharray for each path
+    redFlourish.forEach(path => {
+      const pathLength = path.getTotalLength();
+      gsap.set(path, {
+        strokeDasharray: pathLength,
+        strokeDashoffset: pathLength,
+        stroke: "red",
+        strokeWidth: 1.5,
+        fill: "none",
+        opacity: 1
+      });
+    });
+
+    // Phase 2: Prepare text paths for write-on animation
+    textPaths.forEach(path => {
+      const pathLength = path.getTotalLength();
+      gsap.set(path, {
+        strokeDasharray: pathLength,
+        strokeDashoffset: pathLength,
+        stroke: "#000000",
+        strokeWidth: 0.8,
+        fill: "none",
+        opacity: 1
+      });
+    });
+
+    // Create master timeline for the three-phase animation
+    const masterTimeline = gsap.timeline({ delay: 0.5 });
+
+    // ===== PHASE 1: The Red Flourish (0.0s - 1.5s) =====
+    // Animate each red flourish path with varying speeds for natural feel
+    redFlourish.forEach((path, index) => {
+      // Stagger the start times slightly and vary duration for organic effect
+      const duration = 0.8 + (index * 0.1);
+      const startTime = 0.2 + (index * 0.05);
+
+      masterTimeline.to(path, {
+        strokeDashoffset: 0,
+        duration: duration,
+        ease: "power2.inOut"
+      }, startTime);
+    });
+
+    // Fill the red flourish paths after drawing completes
+    masterTimeline.to(redFlourish, {
+      fill: "red",
+      stroke: "none",
+      duration: 0.3,
+      ease: "sine.inOut"
+    }, 1.2);
+
+    // Create particle splash effect at the end of red flourish
+    // Generate 3 small teardrop particles that splash outwards
+    const particleContainer = svgDoc.createElementNS("http://www.w3.org/2000/svg", "g");
+    particleContainer.setAttribute("id", "particles");
+    mainGroup.appendChild(particleContainer);
+
+    // Create 3 teardrop-shaped particles
+    for (let i = 0; i < 3; i++) {
+      const particle = svgDoc.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+      particle.setAttribute("cx", "330");
+      particle.setAttribute("cy", "410");
+      particle.setAttribute("rx", "2");
+      particle.setAttribute("ry", "3");
+      particle.setAttribute("fill", "red");
+      particle.setAttribute("class", "particle");
+      particleContainer.appendChild(particle);
+
+      // Set initial state for particle animation
+      gsap.set(particle, {
+        opacity: 0,
+        scale: 0,
+        transformOrigin: "center center"
+      });
+
+      // Animate particles splashing outwards at different angles
+      const angle = -30 + (i * 30); // Spread particles at different angles
+      const distance = 15 + (i * 5);
+
+      masterTimeline.to(particle, {
+        opacity: 1,
+        scale: 1,
+        x: Math.cos(angle * Math.PI / 180) * distance,
+        y: Math.sin(angle * Math.PI / 180) * distance,
+        duration: 0.3,
+        ease: "power2.out"
+      }, 1.2 + (i * 0.05));
+
+      // Fade out particles
+      masterTimeline.to(particle, {
+        opacity: 0,
+        scale: 0.5,
+        duration: 0.3,
+        ease: "power2.in"
+      }, 1.35 + (i * 0.05));
+    }
+
+    // ===== PHASE 2: The Title Reveal (1.0s - 3.0s) =====
+    // Animate text paths to write on, starting before red flourish completes
+    textPaths.forEach((path, index) => {
+      // Calculate logical drawing order and duration
+      const duration = 0.6;
+      const startTime = 1.0 + (index * 0.08);
+
+      masterTimeline.to(path, {
+        strokeDashoffset: 0,
+        duration: duration,
+        ease: "power1.inOut"
+      }, startTime);
+    });
+
+    // Fill text paths after drawing completes
+    masterTimeline.to(textPaths, {
+      fill: "#000000",
+      stroke: "none",
+      duration: 0.2,
+      ease: "sine.inOut"
+    }, 2.6);
+
+    // Overshoot and settle animation for text
+    // Group containing all text for unified scaling
+    const textGroup = svgDoc.querySelector("#familyofeateries > g:last-child");
+    gsap.set(textGroup, { transformOrigin: "50% 50%" });
+
+    masterTimeline.to(textGroup, {
+      scale: 1.05,
+      duration: 0.15,
+      ease: "power2.out"
+    }, 2.8);
+
+    masterTimeline.to(textGroup, {
+      scale: 1,
+      duration: 0.2,
+      ease: "power2.inOut"
+    }, 2.95);
+
+    // ===== PHASE 3: Final Polish & Lockup (3.0s - 3.5s) =====
+    // Create subtle light sweep effect across the entire logo
+    const lightSweep = svgDoc.createElementNS("http://www.w3.org/2000/svg", "rect");
+    lightSweep.setAttribute("x", "0");
+    lightSweep.setAttribute("y", "370");
+    lightSweep.setAttribute("width", "40");
+    lightSweep.setAttribute("height", "150");
+    lightSweep.setAttribute("fill", "url(#lightGradient)");
+    lightSweep.setAttribute("opacity", "0.3");
+
+    // Create gradient for light sweep
+    const defs = svgDoc.querySelector("defs") || svgDoc.createElementNS("http://www.w3.org/2000/svg", "defs");
+    if (!svgDoc.querySelector("defs")) {
+      svgDoc.querySelector("svg").insertBefore(defs, svgDoc.querySelector("svg").firstChild);
+    }
+
+    const gradient = svgDoc.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
+    gradient.setAttribute("id", "lightGradient");
+    gradient.setAttribute("x1", "0%");
+    gradient.setAttribute("x2", "100%");
+
+    const stop1 = svgDoc.createElementNS("http://www.w3.org/2000/svg", "stop");
+    stop1.setAttribute("offset", "0%");
+    stop1.setAttribute("style", "stop-color:rgba(255,255,255,0);stop-opacity:1");
+
+    const stop2 = svgDoc.createElementNS("http://www.w3.org/2000/svg", "stop");
+    stop2.setAttribute("offset", "50%");
+    stop2.setAttribute("style", "stop-color:rgba(255,255,255,0.8);stop-opacity:1");
+
+    const stop3 = svgDoc.createElementNS("http://www.w3.org/2000/svg", "stop");
+    stop3.setAttribute("offset", "100%");
+    stop3.setAttribute("style", "stop-color:rgba(255,255,255,0);stop-opacity:1");
+
+    gradient.appendChild(stop1);
+    gradient.appendChild(stop2);
+    gradient.appendChild(stop3);
+    defs.appendChild(gradient);
+    mainGroup.appendChild(lightSweep);
+
+    // Set initial position for light sweep
+    gsap.set(lightSweep, { x: -100, opacity: 0 });
+
+    // Animate light sweep from left to right
+    masterTimeline.to(lightSweep, {
+      opacity: 0.3,
+      duration: 0.1,
+      ease: "sine.in"
+    }, 3.0);
+
+    masterTimeline.to(lightSweep, {
+      x: 350,
+      duration: 0.5,
+      ease: "power1.inOut"
+    }, 3.0);
+
+    masterTimeline.to(lightSweep, {
+      opacity: 0,
+      duration: 0.1,
+      ease: "sine.out"
+    }, 3.4);
+
+    // Final breath animation - subtle scale pulse on entire logo
+    masterTimeline.to(mainGroup, {
+      scale: 1.01,
+      duration: 0.25,
+      ease: "power1.inOut",
+      transformOrigin: "center center"
+    }, 3.0);
+
+    masterTimeline.to(mainGroup, {
+      scale: 1,
+      duration: 0.25,
+      ease: "power1.inOut"
+    }, 3.25);
+
+  });
+}
+
 // Initialize all animations when page loads
 window.addEventListener("DOMContentLoaded", function() {
   animateHearthStone();
   animateFiveVines();
   animateCeviche();
+  animateFamilyOfEateries();
 });
