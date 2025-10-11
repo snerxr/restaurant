@@ -14,12 +14,6 @@
       .cls-3 {
         fill: #ec2024;
       }
-       .cls-4 {
-        fill: none;
-        stroke: #000;
-        stroke-miterlimit: 10;
-        stroke-width: 2px;
-      }
       .stroke-path {
         fill: none;
         stroke: #fff;
@@ -59,6 +53,5 @@
         </g>
       </g>
     </g>
-    <rect id="frame" class="cls-4" x="1" y="1" width="238.21" height="174.82"/>
   </g>
 </svg>

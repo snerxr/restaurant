@@ -3,7 +3,7 @@
   <defs>
     <style>
       .cls-1 {
-        fill: #000;
+        fill: #f0f0f0;
         font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
         font-size: 60px;
         text-anchor: middle;
@@ -11,7 +11,7 @@
 
       .cls-2 {
         fill: none;
-        stroke: #000;
+        stroke: #f0f0f0;
         stroke-miterlimit: 10;
         stroke-width: 2px;
       }
