@@ -363,17 +363,6 @@ function animateCeviche() {
       ease: 'expo.inOut'
     }, "-=0.5");
 
-    const frameLength = frame.getTotalLength();
-    gsap.set(frame, {
-      strokeDasharray: frameLength,
-      strokeDashoffset: frameLength,
-      opacity: 1
-    });
-    timeline.to(frame, {
-      strokeDashoffset: 0,
-      duration: 1.5,
-      ease: 'power1.inOut'
-    }, "-=0.7");
 
     timeline.to([backdrop, svgDoc.querySelector("#fishDetails")], {
       scale: 1.02,
