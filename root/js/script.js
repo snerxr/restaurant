@@ -375,9 +375,245 @@ function animateCeviche() {
   });
 }
 
+/**
+ * FOE (Family of Eateries) Logo Animation
+ * "The Signature Flourish" - Handcrafted write-on effect with particles and polish
+ * Total duration: ~3.5 seconds
+ */
+function animateFOE() {
+  squares.addEventListener("load", function() {
+    const svgDoc = squares.contentDocument;
+
+    // Get all red flourish letter paths (HEARTH & STONE text)
+    const letterH = svgDoc.querySelector("#letterH");
+    const letterE = svgDoc.querySelector("#letterE");
+    const letterA = svgDoc.querySelector("#letterA");
+    const letterR = svgDoc.querySelector("#letterR");
+    const letterT = svgDoc.querySelector("#letterT");
+    const letterH2 = svgDoc.querySelector("#letterH2");
+    const letterAmpersand = svgDoc.querySelector("#letterAmpersand");
+    const letterS = svgDoc.querySelector("#letterS");
+    const letterT2 = svgDoc.querySelector("#letterT2");
+    const letterO = svgDoc.querySelector("#letterO");
+    const letterN = svgDoc.querySelector("#letterN");
+    const letterE2 = svgDoc.querySelector("#letterE2");
+
+    // Group all red flourish letters
+    const redFlourish = [letterH, letterE, letterA, letterR, letterT, letterH2, letterAmpersand, letterS, letterT2, letterO, letterN, letterE2];
+
+    // Get "Bistro" text elements
+    const bistroText = svgDoc.querySelector("#bistroText");
+    const bistroTspans = svgDoc.querySelectorAll("#bistroText tspan");
+
+    // Get other elements
+    const taglineText = svgDoc.querySelector("#taglineText");
+    const outerRect = svgDoc.querySelector("rect");
+
+    // Set initial states - hide all elements
+    gsap.set([bistroText, taglineText, outerRect], {
+      opacity: 0
+    });
+
+    // Calculate path lengths for line drawing animations on red flourish
+    redFlourish.forEach(letter => {
+      if (letter) {
+        const pathLength = letter.getTotalLength();
+        gsap.set(letter, {
+          strokeDasharray: pathLength,
+          strokeDashoffset: pathLength,
+          stroke: "#ec2024",
+          strokeWidth: 0.5,
+          fill: "none",
+          opacity: 1
+        });
+      }
+    });
+
+    // Create master timeline
+    const masterTimeline = gsap.timeline({ delay: 0.5 });
+
+    // PHASE 1: The Red Flourish (0.0s - 1.5s)
+    // Write-on effect for red flourish with varying speeds
+    masterTimeline.to(redFlourish, {
+      strokeDashoffset: 0,
+      duration: 1.0,
+      ease: "power1.inOut",
+      stagger: {
+        amount: 0.2,
+        ease: "none"
+      },
+      onComplete: function() {
+        // Fill in the letters after stroke is drawn
+        gsap.to(redFlourish, {
+          fill: "#ec2024",
+          stroke: "none",
+          duration: 0.2
+        });
+      }
+    }, 0.2);
+
+    // Particle splash at the end of the flourish (1.2s)
+    // Create 3 particle elements
+    const particles = [];
+    for (let i = 0; i < 3; i++) {
+      const particle = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+      particle.setAttribute("cx", "180");
+      particle.setAttribute("cy", "72");
+      particle.setAttribute("rx", "2");
+      particle.setAttribute("ry", "3");
+      particle.setAttribute("fill", "#ec2024");
+      particle.setAttribute("opacity", "0");
+      svgDoc.querySelector("#Bistro").appendChild(particle);
+      particles.push(particle);
+    }
+
+    // Animate particles
+    masterTimeline.to(particles, {
+      opacity: 1,
+      duration: 0.1
+    }, 1.2);
+
+    masterTimeline.to(particles[0], {
+      x: 8,
+      y: -10,
+      rotation: 45,
+      opacity: 0,
+      duration: 0.3,
+      ease: "power2.out"
+    }, 1.2);
+
+    masterTimeline.to(particles[1], {
+      x: 12,
+      y: 5,
+      rotation: -20,
+      opacity: 0,
+      duration: 0.3,
+      ease: "power2.out"
+    }, 1.2);
+
+    masterTimeline.to(particles[2], {
+      x: 6,
+      y: 12,
+      rotation: 30,
+      opacity: 0,
+      duration: 0.3,
+      ease: "power2.out"
+    }, 1.2);
+
+    // PHASE 2: The Title Reveal (1.0s - 3.0s)
+    // Set bistroText visible but hide individual letters
+    gsap.set(bistroText, { opacity: 1 });
+    gsap.set(bistroTspans, {
+      opacity: 0,
+      y: 10,
+      scale: 0.8,
+      transformOrigin: "center bottom"
+    });
+
+    // Write-on effect for "Bistro" text with stagger
+    masterTimeline.to(bistroTspans, {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.4,
+      stagger: 0.12,
+      ease: "power2.out"
+    }, 1.0);
+
+    // Overshoot and settle animation (2.8s)
+    masterTimeline.to(bistroText, {
+      scale: 1.05,
+      duration: 0.1,
+      ease: "power2.out",
+      transformOrigin: "center center"
+    }, 2.5);
+
+    masterTimeline.to(bistroText, {
+      scale: 1.0,
+      duration: 0.2,
+      ease: "elastic.out(1, 0.3)"
+    }, 2.6);
+
+    // PHASE 3: Final Polish & Lockup (3.0s - 3.5s)
+    // Fade in tagline and outer rect
+    masterTimeline.to([taglineText, outerRect], {
+      opacity: 1,
+      duration: 0.3,
+      ease: "power1.inOut"
+    }, 2.8);
+
+    // Create light sweep element
+    const lightSweep = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    lightSweep.setAttribute("x", "-50");
+    lightSweep.setAttribute("y", "0");
+    lightSweep.setAttribute("width", "30");
+    lightSweep.setAttribute("height", "180");
+    lightSweep.setAttribute("fill", "url(#lightGradient)");
+    lightSweep.setAttribute("opacity", "0.3");
+
+    // Create gradient for light sweep
+    const defs = svgDoc.querySelector("defs") || svgDoc.createElementNS("http://www.w3.org/2000/svg", "defs");
+    if (!svgDoc.querySelector("defs")) {
+      svgDoc.querySelector("svg").appendChild(defs);
+    }
+
+    const gradient = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
+    gradient.setAttribute("id", "lightGradient");
+    gradient.setAttribute("x1", "0%");
+    gradient.setAttribute("x2", "100%");
+
+    const stop1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+    stop1.setAttribute("offset", "0%");
+    stop1.setAttribute("stop-color", "white");
+    stop1.setAttribute("stop-opacity", "0");
+
+    const stop2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+    stop2.setAttribute("offset", "50%");
+    stop2.setAttribute("stop-color", "white");
+    stop2.setAttribute("stop-opacity", "0.8");
+
+    const stop3 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+    stop3.setAttribute("offset", "100%");
+    stop3.setAttribute("stop-color", "white");
+    stop3.setAttribute("stop-opacity", "0");
+
+    gradient.appendChild(stop1);
+    gradient.appendChild(stop2);
+    gradient.appendChild(stop3);
+    defs.appendChild(gradient);
+    svgDoc.querySelector("#Bistro").appendChild(lightSweep);
+
+    // Animate light sweep from left to right
+    masterTimeline.fromTo(lightSweep, {
+      x: -50
+    }, {
+      x: 290,
+      duration: 0.5,
+      ease: "none"
+    }, 3.0);
+
+    // Final "breath" animation - entire logo subtly scales
+    masterTimeline.to(svgDoc.querySelector("#Bistro"), {
+      scale: 1.01,
+      duration: 0.3,
+      ease: "sine.inOut",
+      transformOrigin: "center center",
+      yoyo: true,
+      repeat: 1
+    }, 3.0);
+
+    // Remove particles and light sweep after animation
+    masterTimeline.call(() => {
+      particles.forEach(p => p.remove());
+      lightSweep.remove();
+    }, null, 3.5);
+  });
+}
+
 // Initialize all animations when page loads
 window.addEventListener("DOMContentLoaded", function() {
   animateHearthStone();
   animateFiveVines();
   animateCeviche();
+  animateFOE();
 });
