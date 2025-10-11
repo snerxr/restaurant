@@ -49,8 +49,12 @@ function animateHearthStone() {
     const bistroTspans = svgDoc.querySelectorAll("#bistroText tspan");
 
     // Set initial states - hide all elements that will animate
-    gsap.set([hearthOutline, hearthFill, hearthStoneText, bistroText, fork, spoon, underlineScroll, taglineText], {
+    gsap.set([hearthOutline, hearthFill, hearthStoneText, fork, spoon, underlineScroll, taglineText], {
       opacity: 0
+    });
+
+    gsap.set(bistroText, {
+      opacity: 1
     });
 
     // Calculate path lengths for line drawing animations
@@ -171,11 +175,6 @@ function animateHearthStone() {
     );
 
     // Bistro text slide-up and fade-in with stagger
-    masterTimeline.to(bistroText, {
-      opacity: 1,
-      duration: 0.1
-    }, "<");
-
     masterTimeline.from(bistroTspans, {
       opacity: 0,
       y: 20,
@@ -183,7 +182,7 @@ function animateHearthStone() {
       duration: 0.6,
       stagger: 0.08,
       ease: "back.out(1.5)"
-    }, "<+=0.3");
+    }, "+=0.4");
 
     // PHASE 5: Animate utensils - fork and spoon (Step 5)
     // Fork slides from top-left with rotation
