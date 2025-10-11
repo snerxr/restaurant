@@ -385,8 +385,8 @@ function animateCeviche() {
       ease: 'power1.inOut'
     }, "-=0.7");
 
-    timeline.to(svgDoc.querySelector("#Ceviche"), {
-      scale: 0.82,
+    timeline.to([backdrop, svgDoc.querySelector("#fishDetails")], {
+      scale: 1.02,
       transformOrigin: '50% 50%',
       duration: 2,
       ease: 'power1.inOut',
