@@ -2,14 +2,12 @@
 gsap.registerPlugin(MotionPathPlugin, MotionPathHelper);
 
 // Get references to SVG object elements
-let monster = document.querySelector("#monster");
-let catsper = document.querySelector("#catsper");
-let squares = document.querySelector("#squares");
+let ceviche = document.querySelector("#ceviche");
+let fivevines = document.querySelector("#fivevines");
+let foe = document.querySelector("#foe");
 let hearthstone = document.querySelector("#hearthstone");
 
-/**
- * Hearth & Stone Logo Animation
- * Sequential 7-phase animation building the logo element by element
+/* Hearth & Stone Logo Animation
  */
 function animateHearthStone() {
   // Wait for SVG to load before accessing internal elements
@@ -54,7 +52,7 @@ function animateHearthStone() {
     });
 
     gsap.set(bistroText, {
-      opacity: 1
+      opacity: 0
     });
 
     // Calculate path lengths for line drawing animations
@@ -174,14 +172,11 @@ function animateHearthStone() {
       "+=0.4"
     );
 
-    // Bistro text slide-up and fade-in with stagger
-    masterTimeline.from(bistroTspans, {
-      opacity: 0,
-      y: 20,
-      scale: 0.5,
+    // Remove staggered tspans animation and add fade-in for bistroText group
+    masterTimeline.to(bistroText, {
+      opacity: 1,
       duration: 0.6,
-      stagger: 0.08,
-      ease: "back.out(1.5)"
+      ease: "power1.inOut"
     }, "+=0.4");
 
     // PHASE 5: Animate utensils - fork and spoon (Step 5)
@@ -220,26 +215,18 @@ function animateHearthStone() {
       ease: "power1.inOut"
     }, "+=0.2");
 
-    // Final flourish - subtle scale pulse on entire logo
-    masterTimeline.to(svgDoc.querySelector("#Bistro"), {
-      scale: 1.02,
-      duration: 0.3,
-      yoyo: true,
-      repeat: 1,
-      ease: "power1.inOut",
-      transformOrigin: "center center"
-    }, "+=0.5");
-
+    bistroTspans.forEach(tspan => {
+      tspan.style.opacity = "";
+      tspan.style.transform = "";
+    });
   });
 }
 
-/**
- * Five Vines Logo Animation
- * Circle formation, stroke drawing, and bottle reveal with text
+/* Five Vines Logo Animation
  */
 function animateFiveVines() {
-  catsper.addEventListener("load", function() {
-    const svgDoc = catsper.contentDocument;
+  fivevines.addEventListener("load", function() {
+    const svgDoc = fivevines.contentDocument;
 
     // Get all elements
     const mainCircle = svgDoc.querySelector("#mainCircle");
@@ -311,13 +298,11 @@ function animateFiveVines() {
     }, "<");
   });
 }
-/**
- * Ceviche Logo Animation
- * Liquid ink drop effect, fish particle swarm, and text reveal
+/* Ceviche Logo Animation
  */
 function animateCeviche() {
-  monster.addEventListener("load", function() {
-    const svgDoc = monster.contentDocument;
+  ceviche.addEventListener("load", function() {
+    const svgDoc = ceviche.contentDocument;
 
     const backdrop = svgDoc.querySelector("#Backdrop");
     const fishParticles = svgDoc.querySelectorAll("#fishDetails path");
@@ -372,17 +357,6 @@ function animateCeviche() {
       ease: 'expo.inOut'
     }, "-=0.5");
 
-    const frameLength = frame.getTotalLength();
-    gsap.set(frame, {
-      strokeDasharray: frameLength,
-      strokeDashoffset: frameLength,
-      opacity: 1
-    });
-    timeline.to(frame, {
-      strokeDashoffset: 0,
-      duration: 1.5,
-      ease: 'power1.inOut'
-    }, "-=0.7");
 
     timeline.to([backdrop, svgDoc.querySelector("#fishDetails")], {
       scale: 1.02,
@@ -395,15 +369,13 @@ function animateCeviche() {
   });
 }
 
-/**
- * Family of Eateries Logo Animation
- * Three-phase signature flourish animation: red script, title reveal, and polish
+/* Family of Eateries Logo Animation
  */
 function animateFamilyOfEateries() {
   // Wait for SVG to load before accessing internal elements
-  squares.addEventListener("load", function() {
+  foe.addEventListener("load", function() {
     // Access the SVG document inside the object tag
-    const svgDoc = squares.contentDocument;
+    const svgDoc = foe.contentDocument;
 
     // Get the main group containing all logo elements
     const mainGroup = svgDoc.querySelector("#familyofeateries");
@@ -447,7 +419,7 @@ function animateFamilyOfEateries() {
     // Create master timeline for the three-phase animation
     const masterTimeline = gsap.timeline({ delay: 0.5 });
 
-    // ===== PHASE 1: The Red Flourish (0.0s - 1.5s) =====
+    // PHASE 1: The Red Flourish
     // Animate each red flourish path with varying speeds for natural feel
     redFlourish.forEach((path, index) => {
       // Stagger the start times slightly and vary duration for organic effect
@@ -515,7 +487,7 @@ function animateFamilyOfEateries() {
       }, 1.35 + (i * 0.05));
     }
 
-    // ===== PHASE 2: The Title Reveal (1.0s - 3.0s) =====
+    // PHASE 2: The Title Reveal
     // Animate text paths to write on, starting before red flourish completes
     textPaths.forEach((path, index) => {
       // Calculate logical drawing order and duration
@@ -554,7 +526,7 @@ function animateFamilyOfEateries() {
       ease: "power2.inOut"
     }, 2.95);
 
-    // ===== PHASE 3: Final Polish & Lockup (3.0s - 3.5s) =====
+    // PHASE 3: Final Polish & Lockup
     // Create subtle light sweep effect across the entire logo
     const lightSweep = svgDoc.createElementNS("http://www.w3.org/2000/svg", "rect");
     lightSweep.setAttribute("x", "0");
